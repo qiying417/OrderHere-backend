@@ -15,6 +15,7 @@ public class StaticConfig {
     };
 
     // JWT
-    public final static String JwtSecretKey = "JwtSecretKey";
+//    public final static String JwtSecretKey = "JwtSecretKey";
+    public final static String JwtSecretKey = "Xh8wJZcPZfa7t2WdKr4zr9TnRfWP8xYhV1a8dYkHfTw=";
     public final static String JwtPrefix = "Bearer ";
 }

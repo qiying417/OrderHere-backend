@@ -1,5 +1,7 @@
 package com.backend.OrderHere.controller.v1;
 
+import com.backend.OrderHere.dto.Signin.SignupRequestDTO;
+import com.backend.OrderHere.dto.Signin.SignupResponseDTO;
 import com.backend.OrderHere.dto.UserProfileUpdateDTO;
 import com.backend.OrderHere.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,4 +24,12 @@ public class UserController {
     UserProfileUpdateDTO updatedUserProfile = userService.updateUserProfile(userId, dto);
     return new ResponseEntity<>(updatedUserProfile, HttpStatus.OK);
   }
+
+  @RequestMapping("/signup")
+  public ResponseEntity<SignupResponseDTO> createUser(@RequestBody SignupRequestDTO signUpPostDto){
+    SignupResponseDTO createdUser = userService.createUser(signUpPostDto);
+    return new ResponseEntity<SignupResponseDTO>(createdUser, HttpStatus.OK);
+  }
+
+
 }

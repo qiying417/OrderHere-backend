@@ -1,7 +1,9 @@
 package com.backend.OrderHere.mapper;
 
+import com.backend.OrderHere.dto.Signin.SignupResponseDTO;
 import com.backend.OrderHere.dto.UserProfileUpdateDTO;
 import com.backend.OrderHere.model.User;
+import jakarta.annotation.Nullable;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
@@ -11,4 +13,7 @@ public interface UserMapper {
   void updateUserFromUserProfileUpdateDTO(UserProfileUpdateDTO dto, @MappingTarget User user);
 
   UserProfileUpdateDTO userToUserProfileUpdateDTO(User updatedUser);
+
+
+  SignupResponseDTO userToSignupResponseDTO(User createdUser);
 }
