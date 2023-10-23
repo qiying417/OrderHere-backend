@@ -9,5 +9,5 @@ public interface DishRepository extends JpaRepository<Dish, Integer> {
 
     List<Dish> findByName(String name);
 
-    // 添加任何其他您需要的查询方法
+    
 }
