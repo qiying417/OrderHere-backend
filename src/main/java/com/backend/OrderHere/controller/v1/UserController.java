@@ -7,10 +7,11 @@ import com.backend.OrderHere.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/v1/public/users")
 public class UserController {
 
   private final UserService userService;
@@ -25,7 +26,7 @@ public class UserController {
     return new ResponseEntity<>(updatedUserProfile, HttpStatus.OK);
   }
 
-  @RequestMapping("/signup")
+  @PostMapping("/signup")
   public ResponseEntity<SignupResponseDTO> createUser(@RequestBody SignupRequestDTO signUpPostDto){
     SignupResponseDTO createdUser = userService.createUser(signUpPostDto);
     return new ResponseEntity<SignupResponseDTO>(createdUser, HttpStatus.OK);

@@ -26,13 +26,22 @@ import java.util.Optional;
 public class AuthService {
 
     private final UserService userService;
+
+
+    /**
+     * retrieve user details from database and generate JWT token if user authenticated
+     * */
+
     public JwtResponseDTO retrieveUser(LoginRequestDTO loginRequestDTO) {
-        User savedUser = userService.findByEmail(loginRequestDTO).orElseThrow(()-> new ResourceNotFoundException("user not found"));
+        User savedUser = userService.findByEmail(loginRequestDTO);
+        if(savedUser == null){
+            throw new ResourceNotFoundException("user not found");
+        }
         if(savedUser.getPassword().equals(loginRequestDTO.getPassword())){
             String jwt_token = Jwts.builder()
                     .subject(savedUser.getUserId().toString())
-                    .claim("userName", savedUser.getUsername())
-                    .claim("authority", savedUser.getUserRole())
+//                    .claim("userName", savedUser.getUsername())
+                    .claim("authorities", savedUser.getUserRole())
                     .issuedAt(new Date())
                     .expiration(Date.from(Instant.now().plusMillis(24*60*60*1000))) //24 hours expiration
                     .signWith(Keys.hmacShaKeyFor(StaticConfig.JwtSecretKey.getBytes()))
@@ -41,4 +50,10 @@ public class AuthService {
         }
         throw new UnAuthorizedException("Invalid password or email");
     }
+
+
+
+
+
+
 }

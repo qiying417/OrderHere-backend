@@ -12,8 +12,10 @@ import com.backend.OrderHere.model.enums.UserRole;
 import com.backend.OrderHere.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.MessageDigest;
 import java.util.Optional;
 
 @Service
@@ -44,12 +46,16 @@ public class UserService {
   }
 
   public SignupResponseDTO createUser(SignupRequestDTO signUpPostDto) {
+
+    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    String hashedPassword = encoder.encode(signUpPostDto.getPassword());
+
     User newUser = User.builder()
             .username(signUpPostDto.getUserName())
             .firstname(signUpPostDto.getFirstName())
             .lastname(signUpPostDto.getLastName())
             .email(signUpPostDto.getEmail())
-            .password(signUpPostDto.getPassword())
+            .password(hashedPassword)
             .point(0)
             .avatarUrl("default.com")
             .userRole(UserRole.customer)
@@ -58,7 +64,7 @@ public class UserService {
     return userMapper.userToSignupResponseDTO(createdUser);
   }
 
-  public Optional<User> findByEmail(LoginRequestDTO loginRequestDTO) {
+  public User findByEmail(LoginRequestDTO loginRequestDTO) {
     return userRepository.findByEmail(loginRequestDTO.getEmail());
   }
 }
