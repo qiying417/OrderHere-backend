@@ -23,11 +23,13 @@ public class UserService {
 
   private final UserRepository userRepository;
   private final UserMapper userMapper;
+  private final TokenService tokenService;
 
   @Autowired
-  public UserService(UserRepository userRepository, UserMapper userMapper) {
+  public UserService(UserRepository userRepository, UserMapper userMapper, TokenService tokenService) {
     this.userRepository = userRepository;
     this.userMapper = userMapper;
+    this.tokenService = tokenService;
   }
 
   public UserProfileUpdateDTO updateUserProfile(Integer userId, UserProfileUpdateDTO dto) {
@@ -67,6 +69,29 @@ public class UserService {
   public User findByEmail(LoginRequestDTO loginRequestDTO) {
     return userRepository.findByEmail(loginRequestDTO.getEmail());
   }
+ 
+  
+  public User findByEmail( String email) {
+    return userRepository.findByEmail( email);
+  }
+
+  
+  public boolean resetPassword(String email, String code, String newPassword) {
+    // check whether token is valid
+    if (tokenService.isCodeValid(code)) {
+      // check whether user exist
+      User user = userRepository.findByEmail(email);
+      if (user != null) {
+        // if all match
+        user.setPassword(newPassword);
+        userRepository.save(user);
+        return true; // reset success
+      }
+    }
+    return false; // reset fail
+  }
+
+
 }
 
 
