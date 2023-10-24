@@ -1,6 +1,7 @@
 package com.backend.OrderHere.filter;
 
 import com.backend.OrderHere.config.StaticConfig;
+import com.backend.OrderHere.jwt.AuthenticationRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -11,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationManagerResolver;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -19,7 +19,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import java.time.Instant;
 import java.util.Date;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class JwtCredentialsAuthenticationFilter extends UsernamePasswordAuthenticationFilter {

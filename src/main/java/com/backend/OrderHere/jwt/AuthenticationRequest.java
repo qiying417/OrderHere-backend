@@ -1,4 +1,4 @@
-package com.backend.OrderHere.filter;
+package com.backend.OrderHere.jwt;
 
 import lombok.Data;
 
@@ -6,5 +6,4 @@ import lombok.Data;
 public class AuthenticationRequest {
     private String email; //username
     private String password;
-
 }
