@@ -14,10 +14,12 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UserService {
 
-  //User signup Const
+  //Declare Constant value for initialize user
   private final static int INIT_REWARD_POINT = 0;
   private final static String INIT_AVATAR_URL = "SOME_DEFAULT_URL";
 
@@ -25,6 +27,7 @@ public class UserService {
   private final UserRepository userRepository;
   private final UserMapper userMapper;
   private final TokenService tokenService;
+  private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
   @Autowired
   public UserService(UserRepository userRepository, UserMapper userMapper, TokenService tokenService) {
@@ -48,21 +51,24 @@ public class UserService {
     }
   }
 
-  public User findByEmail( String email) {
-    return userRepository.findByEmail( email);
+  public User findByEmail(String email) {
+    return userRepository.findByEmail(email).orElseThrow(
+            ()-> new ResourceNotFoundException("User not found"));
   }
 
   public boolean resetPassword(String email, String code, String newPassword) {
-    // check whether token is valid
-    if (tokenService.isCodeValid(code)) {
-      // check whether user exist
-      User user = userRepository.findByEmail(email);
-      if (user != null) {
-        // if all match
-        user.setPassword(newPassword);
+
+    //retrieve user details
+    User user = userRepository.findByEmail(email).orElseThrow(
+            ()-> new ResourceNotFoundException("User not found"));
+
+    //Create BCryptPassword
+    String hashedPassword = encoder.encode(newPassword);
+
+    if (tokenService.isCodeValid(code) ) {
+        user.setPassword(hashedPassword);
         userRepository.save(user);
         return true; // reset success
-      }
     }
     return false; // reset fail
   }
@@ -70,7 +76,6 @@ public class UserService {
   public UserSignUpResponseDTO createUser(UserSignUpRequestDTO userSignUpRequestDTO) {
 
     //Create BCryptPassword
-    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
     String hashedPassword = encoder.encode(userSignUpRequestDTO.getPassword());
 
     //create user

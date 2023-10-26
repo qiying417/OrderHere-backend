@@ -1,5 +1,6 @@
 package com.backend.OrderHere.auth;
 
+import com.backend.OrderHere.exception.ResourceNotFoundException;
 import com.backend.OrderHere.model.User;
 import com.backend.OrderHere.model.enums.UserRole;
 import com.backend.OrderHere.repository.UserRepository;
@@ -21,7 +22,8 @@ public class ApplicationUserDaoImpl implements ApplicationUserDao{
     public Optional<ApplicationUserDetails> fetchUserbyUserEmail(String email) {
 
         //retrieve user details from database
-        User user = userRepository.findByEmail(email);
+        User user = userRepository.findByEmail(email).
+                orElseThrow(()->new ResourceNotFoundException("user not found"));
 
 
         //create new applicationUserDetail and

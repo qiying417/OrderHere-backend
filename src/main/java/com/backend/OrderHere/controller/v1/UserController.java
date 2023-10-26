@@ -1,5 +1,6 @@
 package com.backend.OrderHere.controller.v1;
 
+import com.backend.OrderHere.dto.User.ResetPasswordDTO;
 import com.backend.OrderHere.dto.User.UserForgetPasswordRequestDTO;
 import com.backend.OrderHere.dto.User.UserSignUpRequestDTO;
 import com.backend.OrderHere.dto.User.UserSignUpResponseDTO;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/v1/public/users")
@@ -47,9 +49,6 @@ public class UserController {
 
     // check whether user email exist
     User user = userService.findByEmail(userForgetPasswordRequestDTO.getEmail());
-    if (user == null) {
-      return new ResponseEntity<>("Invalid email", HttpStatus.BAD_REQUEST);
-    }
 
     // generate 6-digit code
     String code = tokenService.generateCode();
@@ -65,12 +64,14 @@ public class UserController {
   }
 
   @PostMapping("/reset")
-  public ResponseEntity<String> resetPassword(@RequestBody Map<String, String> body) {
-    String email = body.get("email");
-    String code = body.get("code");
-    String newPassword = body.get("newPassword");
+  public ResponseEntity<String> resetPassword(@RequestBody ResetPasswordDTO resetPasswordDTO) {
 
-    boolean resetSuccessful = userService.resetPassword(email, code, newPassword);
+    boolean resetSuccessful = userService.resetPassword(
+            resetPasswordDTO.getEmail(),
+            resetPasswordDTO.getCode(),
+            resetPasswordDTO.getNewPassword()
+    );
+
     if (resetSuccessful) {
       return new ResponseEntity<>("Password reset successful.", HttpStatus.OK);
     } else {
