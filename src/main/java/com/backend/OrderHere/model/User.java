@@ -44,7 +44,7 @@ public class User {
     private String avatarUrl;
 
     @Column(name = "point")
-    private int point;
+    private Integer point;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "user_role", nullable = false, columnDefinition = "user_role")
