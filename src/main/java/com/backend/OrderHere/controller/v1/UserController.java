@@ -9,9 +9,11 @@ import com.backend.OrderHere.model.User;
 import com.backend.OrderHere.service.EmailService;
 import com.backend.OrderHere.service.TokenService;
 import com.backend.OrderHere.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
@@ -32,18 +34,24 @@ public class UserController {
     this.emailService = emailService;
     this.tokenService = tokenService;
   }
+
+  @Operation(summary = "update user, require Authentication")
   @PutMapping("/{userId}/profile")
   public ResponseEntity<UserProfileUpdateDTO> updateProfile(@PathVariable Integer userId, @RequestBody UserProfileUpdateDTO dto) {
     UserProfileUpdateDTO updatedUserProfile = userService.updateUserProfile(userId, dto);
     return new ResponseEntity<>(updatedUserProfile, HttpStatus.OK);
   }
 
+  @Operation(summary = "User sign up")
   @PostMapping("/signup")
   public ResponseEntity<UserSignUpResponseDTO> userSignUp(@RequestBody UserSignUpRequestDTO userSignUpRequestDTO){
     UserSignUpResponseDTO user = userService.createUser(userSignUpRequestDTO);
     return new ResponseEntity<UserSignUpResponseDTO>(user, HttpStatus.OK);
   }
 
+
+
+  @Operation(summary = "forget password feature, send email")
   @PostMapping("/forget-password")
   public ResponseEntity<String> forgotPassword(@RequestBody UserForgetPasswordRequestDTO userForgetPasswordRequestDTO) {
 

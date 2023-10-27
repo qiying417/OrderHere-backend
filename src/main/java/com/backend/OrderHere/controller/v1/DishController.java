@@ -6,6 +6,7 @@ import com.backend.OrderHere.dto.dish.DishGetDto;
 import com.backend.OrderHere.service.CategoryService;
 import com.backend.OrderHere.service.DishService;
 import com.backend.OrderHere.service.enums.DishSort;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -24,6 +25,7 @@ public class DishController {
 
     @GetMapping("/{restaurantId}")
     @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "get dishes information")
     public PagingDto<List<DishGetDto>> getDishes(@PathVariable Integer restaurantId,
                                                                 @RequestParam(defaultValue = "1") int page,
                                                                 @RequestParam(defaultValue = "0") int size,
@@ -39,6 +41,7 @@ public class DishController {
     }
     @GetMapping("/{restaurantId}/{categoryId}")
     @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "get dishes by category")
     public List<DishGetDto> getDishesByCategory(@PathVariable Integer restaurantId,
                                                 @PathVariable Integer categoryId) {
         return dishService.getDishByCategory(restaurantId, categoryId);
