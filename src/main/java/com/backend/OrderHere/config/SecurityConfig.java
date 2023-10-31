@@ -5,7 +5,6 @@ import com.backend.OrderHere.auth.ApplicationUserService;
 import com.backend.OrderHere.filter.JwtCredentialsAuthenticationFilter;
 import com.backend.OrderHere.filter.JwtVerifyFilter;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
