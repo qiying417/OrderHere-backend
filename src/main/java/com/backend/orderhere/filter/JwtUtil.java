@@ -25,7 +25,8 @@ public class JwtUtil {
         .claim("authorities", authResult.getAuthorities())
         .claim("userId", applicationUserDetails.getUserId())
         .claim("avatarURL", applicationUserDetails.getUserAvatarURL())
-        .setIssuedAt(new Date())
+            .claim("userName", applicationUserDetails.getUserName())
+            .setIssuedAt(new Date())
         .setExpiration(Date.from(Instant.now().plusMillis(24 * 60 * 60 * 1000))) //24 hours expiration
         .signWith(Keys.hmacShaKeyFor(StaticConfig.JwtSecretKey.getBytes()))
         .compact();

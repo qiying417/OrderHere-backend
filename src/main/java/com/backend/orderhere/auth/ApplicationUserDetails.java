@@ -19,6 +19,7 @@ public class ApplicationUserDetails implements UserDetails {
     private final boolean isEnabled;
     private final Integer userId;
     private final String userAvatarURL;
+    private final String userName;
 
 
     @Override
@@ -61,5 +62,9 @@ public class ApplicationUserDetails implements UserDetails {
 
     public String getUserAvatarURL() {
         return userAvatarURL;
+    }
+
+    public String getUserName() {
+        return userName;
     }
 }

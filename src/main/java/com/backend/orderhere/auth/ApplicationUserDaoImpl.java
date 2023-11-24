@@ -36,7 +36,8 @@ public class ApplicationUserDaoImpl implements ApplicationUserDao {
         true,
         true,
         user.getUserId(),
-        user.getAvatarUrl()
+        user.getAvatarUrl(),
+        user.getUsername()
     );
     return Optional.of(applicationUserDetails);
   }
