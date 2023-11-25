@@ -25,8 +25,21 @@ public class JwtUtil {
         .claim("authorities", authResult.getAuthorities())
         .claim("userId", applicationUserDetails.getUserId())
         .claim("avatarURL", applicationUserDetails.getUserAvatarURL())
-            .claim("userName", applicationUserDetails.getUserName())
-            .setIssuedAt(new Date())
+        .claim("userName", applicationUserDetails.getUserName())
+        .setIssuedAt(new Date())
+        .setExpiration(Date.from(Instant.now().plusMillis(24 * 60 * 60 * 1000))) //24 hours expiration
+        .signWith(Keys.hmacShaKeyFor(StaticConfig.JwtSecretKey.getBytes()))
+        .compact();
+  }
+
+  //generate Jwt token based on Exist user
+  public static String generateToken(User user){
+    return Jwts.builder().setSubject(user.getEmail())
+        .claim("authorities", user.getUserRole())
+        .claim("userId", user.getUserId())
+        .claim("avatarURL", user.getAvatarUrl())
+        .claim("userName", user.getUsername())
+        .setIssuedAt(new Date())
         .setExpiration(Date.from(Instant.now().plusMillis(24 * 60 * 60 * 1000))) //24 hours expiration
         .signWith(Keys.hmacShaKeyFor(StaticConfig.JwtSecretKey.getBytes()))
         .compact();
