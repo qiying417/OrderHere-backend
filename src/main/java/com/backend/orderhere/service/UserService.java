@@ -95,24 +95,40 @@ public class UserService {
     return userMapper.userToUserSignUpResponseDTO(createdUser);
   }
 
-  public String createUser(OauthProviderLoginSessionDTO sessionData) {
+  public String createUser(OauthProviderLoginSessionDTO sessionData, String openId, String provider) {
 
     //Create BCryptPassword by userEmail
     String hashedPassword = encoder.encode(sessionData.getUsername() + sessionData.getEmail());
     //create user
-    User user = User.builder()
-        .username(sessionData.getUsername())
-        .firstname(sessionData.getUsername())
-        .lastname(" ")
-        .email(sessionData.getEmail())
-        .password(hashedPassword)
-        .point(INIT_REWARD_POINT)
-        .avatarUrl(sessionData.getAvatarUrl())
-        .userRole(UserRole.customer)
-        .build();
-    //create user and map user to response form
-    User createdUser = userRepository.save(user);
-    return JwtUtil.generateToken(createdUser);
+    if(provider.equals("google")){
+      User user = User.builder()
+          .username(sessionData.getUsername())
+          .firstname(sessionData.getUsername())
+          .lastname(" ")
+          .email(sessionData.getEmail())
+          .password(hashedPassword)
+          .point(INIT_REWARD_POINT)
+          .avatarUrl(sessionData.getAvatarUrl())
+          .userRole(UserRole.customer)
+          .googleOpenId(openId)
+          .build();
+      User createdUser = userRepository.save(user);
+      return JwtUtil.generateToken(createdUser);
+    }else {
+      User user = User.builder()
+          .username(sessionData.getUsername())
+          .firstname(sessionData.getUsername())
+          .lastname(" ")
+          .email(sessionData.getEmail())
+          .password(hashedPassword)
+          .point(INIT_REWARD_POINT)
+          .avatarUrl(sessionData.getAvatarUrl())
+          .userRole(UserRole.customer)
+          .facebookOpenId(openId)
+          .build();
+      User createdUser = userRepository.save(user);
+      return JwtUtil.generateToken(createdUser);
+    }
   }
 
 

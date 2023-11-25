@@ -49,7 +49,7 @@ public class UserController {
                                           @RequestBody OauthProviderLoginSessionDTO token) {
     String jwtTokenResponse = userService.checkUserOpenId(openId, provider);
     if(jwtTokenResponse == null){
-      String newUserToken = userService.createUser(token);
+      String newUserToken = userService.createUser(token, openId, provider);
       return new ResponseEntity<>(newUserToken, HttpStatus.OK);
     }else{
       return new ResponseEntity<>(jwtTokenResponse, HttpStatus.OK);
